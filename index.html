@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <title>SVG:Fusion->Epilog</title>
+    <script>
+
+      var minX = null, minY = null;
+
+      var turned = getURLParameter('turn');
+
+      function getURLParameter(name) {
+          return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(window.location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+      }
+
+      if (turned) {
+        var theSVG = document.getElementsByTagName('svg');
+        for (var k = 0; k < theSVG.length; k++) {
+          var theViewBox = theSVG[k].getAttribute('viewBox').split(' ');
+          var tempDim = [theSVG[k].getAttribute('height'), theSVG[k].getAttribute('width')];
+          while(theSVG[k].attributes.length > 0) {
+            theSVG[k].removeAttribute(theSVG[k].attributes[0].name);
+          }
+          theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + theViewBox[3] + ' ' + theViewBox[2]);
+          theSVG[k].setAttribute('height', tempDim[1]);
+          theSVG[k].setAttribute('width', tempDim[0]);
+        }
+      }
+
+      var thePaths = document.getElementsByTagName('path');
+
+      for (var a = 0; a < thePaths.length; a++) {
+        scanMin(thePaths[a]);
+      }
+
+      for (var a = 0; a < thePaths.length; a++) {
+        flatten(thePaths[a]);
+      }
+
+      function scanMin(path){
+        var l = path.getTotalLength();
+        var num = Math.floor(l / 0.1) + 1;
+
+
+        for(var j = 0; j<=l; j+=(l/num)) {
+          var p0 = path.getPointAtLength(j);
+          var pX = p0.x;
+          var pY = p0.y;
+          if (!minX) minX = pX;
+          if (!minY) minY = pY;
+          if (minX > pX) minX = pX;
+          if (minY > pY) minY = pY;
+        }
+      }
+
+      function flatten(path){
+        var l = path.getTotalLength();
+        var num = Math.floor(l / 0.05) + 1;
+        var p = path.getPointAtLength(0);
+        var p2 = p;
+        var lastP = 0;
+        var d = turned ? `M${+((p.y)-minY).toFixed(4)} ${+((p.x)-minX).toFixed(4)}` : `M${+((p.x)-minX).toFixed(4)} ${+((p.y)-minY).toFixed(4)}`;
+        for(var i = (l/num);i<=l;i+=(l/num)){
+          p = path.getPointAtLength(i);
+          if (i<l) {
+            var p3 = path.getPointAtLength(i + (l/num));
+            if (slope(p,p2) !== slope(p2,p3)) {
+              d+=turned ? `L${+((p.y)-minY).toFixed(4)} ${+((p.x)-minX).toFixed(4)}` : `L${+((p.x)-minX).toFixed(4)} ${+((p.y)-minY).toFixed(4)}`;
+            }
+          } else {
+            d+=turned ? `L${+((p.y)-minY).toFixed(4)} ${+((p.x)-minX).toFixed(4)}` : `L${+((p.x)-minX).toFixed(4)} ${+((p.y)-minY).toFixed(4)}`;
+          }
+          p2 = p;
+        }
+
+        while(path.attributes.length > 0) {
+          path.removeAttribute(path.attributes[0].name);
+        }
+
+        console.log(d+"z");
+        path.setAttribute("d",d+"z")
+        path.setAttribute("stroke-width", "0.00254");
+        path.setAttribute("stroke", "rgb(255,0,0)");
+        path.setAttribute("fill", "none");
+      }
+
+      function slope(p1,p2) {
+        if (p1.y === p2.y) {
+          return null;
+        }
+        return (p2.x-p1.x)/(p2.y-p1.y);
+      }
+
+    </script>
+
+  </head>
+  <body>
+  </body>
+</html>
