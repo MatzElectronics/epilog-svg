@@ -40,7 +40,7 @@
     </style>
     
     <script>
-      var minX = null, minY = null;
+      var minX = null, minY = null, turned = false;
       var SVGcontents = '';
       
       /*
@@ -73,7 +73,7 @@
       }
       
       function setupSVGformatting() {
-        var turned = document.getElementById('flip').value === '0' ? false : true;
+        turned = document.getElementById('flip').value === '0' ? false : true;
         if (turned) {
           var theSVG = document.getElementsByTagName('svg');
           for (var k = 0; k < theSVG.length; k++) {
