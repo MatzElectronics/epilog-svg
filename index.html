@@ -60,8 +60,9 @@
         var rowCount = parseInt(document.getElementById('mHigh').value);
         var colCount = parseInt(document.getElementById('mWide').value);
         
+        var row = []
         for (var m = 0; m < rowCount; m++) {
-          var row[m] = theTable.insertRow(m);
+          row[m] = theTable.insertRow(m);
           for (var n = 0; n < colCount; n++) {
             var cell = row[m].insertCell(n);
             cell.innerHTML = SVGcontents;
