@@ -48,7 +48,7 @@
 
       $(document).ready(function () {
         document.getElementById('fileInput').addEventListener('change', readSingleFile, false);
-      }
+      });
       
       function setupSVGtable() {
         document.getElementsByTagName('table')[0].style.margin = `${getURLParameter('offsetTop') || 0} 0 0 ${getURLParameter('offsetLeft') || 0}`;
