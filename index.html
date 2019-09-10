@@ -1,44 +1,88 @@
 <html>
   <head>
     <title>SVG:Fusion->Epilog</title>
-    <script>
-
-      var minX = null, minY = null;
-
-      var turned = getURLParameter('turn');
-
-      function getURLParameter(name) {
-          return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(window.location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,900,900i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Mono:400" rel="stylesheet">
+    <style type="text/css" media="screen">
+      html {
+        font-size: 18px;
       }
 
-      if (turned) {
-        var theSVG = document.getElementsByTagName('svg');
-        for (var k = 0; k < theSVG.length; k++) {
-          var theViewBox = theSVG[k].getAttribute('viewBox').split(' ');
-          var tempDim = [theSVG[k].getAttribute('height'), theSVG[k].getAttribute('width')];
-          while(theSVG[k].attributes.length > 0) {
-            theSVG[k].removeAttribute(theSVG[k].attributes[0].name);
+      body {
+        font-weight: 400;
+        font-family: "Lato", "Helvetica Neue", arial, sans-serif;
+        line-height: 1.666;
+        -webkit-font-smoothing: antialiased;
+        margin: 0;
+      }
+
+      .wrapper {
+        padding: 2em 20px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      small { color: #aaa; }
+      h1,h2,h3,h4 { color: #404a50; font-weight: 800; font-size: 1.75em; line-height: 1.1; margin: 0 0 1.5rem 0; }
+      h2 a { color: #cad1d5; border: none; }
+      h2 a:hover { color: #fa0065; }
+      a { color: #fa0065; font-weight: 700; transition-duration: .2s; text-decoration: none; border-bottom: 2px solid transparent; }
+      a:hover { color: #22272a; border-color: #22272a; }
+      p, ul, ol, pre { margin: 0 auto 1.5rem auto; }
+      p code, li code {color: #000080; font-size: .9em; }
+      pre { font-size: 14px; line-height: 2; }
+      pre code { overflow: scroll; padding: 1em; border-radius: 4px; background: #f9fafb; color: #475359; }
+      hr { height: 3px; background: #f0f2f3; border: none; margin: 3rem 0; border-radius: 3px; }
+      code { font-family: 'fira mono', monospace; }
+    </style>
+    
+    <script>
+      var minX = null, minY = null;
+      
+      function getURLParameter(name) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(window.location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+      }
+
+      $(document).ready(function () {
+        document.getElementById('fileInput').addEventListener('change', readSingleFile, false);
+      }
+      
+      function setupSVGtable() {
+        document.getElementsByTagName('table')[0].style.margin = `${getURLParameter('offsetTop') || 0} 0 0 ${getURLParameter('offsetLeft') || 0}`;
+        var turned = getURLParameter('turn');
+        if (turned) {
+          var theSVG = document.getElementsByTagName('svg');
+          for (var k = 0; k < theSVG.length; k++) {
+            var theViewBox = theSVG[k].getAttribute('viewBox').split(' ');
+            var tempDim = [theSVG[k].getAttribute('height'), theSVG[k].getAttribute('width')];
+            while(theSVG[k].attributes.length > 0) {
+              theSVG[k].removeAttribute(theSVG[k].attributes[0].name);
+            }
+            theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + theViewBox[3] + ' ' + theViewBox[2]);
+            theSVG[k].setAttribute('height', tempDim[1]);
+            theSVG[k].setAttribute('width', tempDim[0]);
           }
-          theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + theViewBox[3] + ' ' + theViewBox[2]);
-          theSVG[k].setAttribute('height', tempDim[1]);
-          theSVG[k].setAttribute('width', tempDim[0]);
         }
       }
-
-      var thePaths = document.getElementsByTagName('path');
-
-      for (var a = 0; a < thePaths.length; a++) {
-        scanMin(thePaths[a]);
       }
-
-      for (var a = 0; a < thePaths.length; a++) {
-        flatten(thePaths[a]);
+      
+      function polyLinePaths() {
+        var thePaths = document.getElementsByTagName('path');
+        for (var a = 0; a < thePaths.length; a++) {
+          scanMin(thePaths[a]);
+        }
+        for (var a = 0; a < thePaths.length; a++) {
+          flatten(thePaths[a]);
+        }
       }
+      
 
       function scanMin(path){
         var l = path.getTotalLength();
         var num = Math.floor(l / 0.1) + 1;
-
 
         for(var j = 0; j<=l; j+=(l/num)) {
           var p0 = path.getPointAtLength(j);
@@ -75,7 +119,7 @@
           path.removeAttribute(path.attributes[0].name);
         }
 
-        console.log(d+"z");
+        //console.log(d+"z");
         path.setAttribute("d",d+"z")
         path.setAttribute("stroke-width", "0.00254");
         path.setAttribute("stroke", "rgb(255,0,0)");
@@ -88,10 +132,42 @@
         }
         return (p2.x-p1.x)/(p2.y-p1.y);
       }
+      
+      function readSingleFile(evt) {
+        //Retrieve the first (and only!) File from the FileList object
+        var f = evt.target.files[0]; 
 
+        if (f) {
+          var r = new FileReader();
+          
+          //TODO: change this.
+          r.onload = function(e) { 
+            var contents = e.target.result;
+            alert( "Got the file.n" 
+                  +"name: " + f.name + "n"
+                  +"type: " + f.type + "n"
+                  +"size: " + f.size + " bytesn"
+                  + "starts with: " + contents.substr(1, contents.indexOf("n"))
+            );  
+          }
+          r.readAsText(f);
+        } else { 
+          alert("Failed to load file");
+        }
+      }
     </script>
 
   </head>
   <body>
+    <!-- Modal HTML embedded directly into document -->
+    <div id="ex1" class="modal">
+      <input type="file" id="fileInput" name="fileInput" />
+      <p>Thanks for clicking. That felt good.</p>
+      <a href="#" rel="modal:close">Close</a>
+    </div>
+
+    <!-- Link to open the modal -->
+    <p><a href="#ex1" rel="modal:open">Open Modal</a></p>
+    
   </body>
 </html>
