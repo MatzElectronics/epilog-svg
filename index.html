@@ -55,7 +55,7 @@
       
       function setupSVGtable() {
         var theTable = document.getElementsByTagName('table')[0];
-        theTable.style.margin = `${(document.getElementById('oTop') + 'in') || 0} 0 0 ${(document.getElementById('oLeft') + 'in') || 0}`;
+        theTable.style.margin = `${(parseFloat(document.getElementById('oTop'))-0.4) || 0}in 0 0 ${(parseFloat(document.getElementById('oLeft'))-0.4) || 0}in`;
         
         var rowCount = parseInt(document.getElementById('mHigh').value);
         var colCount = parseInt(document.getElementById('mWide').value);
@@ -175,7 +175,7 @@
       <hr>
       <p>Offset in inches (0.5 inch minimum):</p>
       <label for="oTop">Top</label>
-      <input type="oTop" id="wide" name="oTop" value="0.5" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.5) this.value='0.5';" />
+      <input type="oTop" id="oTop" name="oTop" value="0.5" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.5) this.value='0.5';" />
       <label for="oLeft">Left</label>
       <input type="text" id="oLeft" name="oLeft" value="0.5" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.5) this.value='0.5';" />
       <hr>
