@@ -31,28 +31,48 @@
       h2 a:hover { color: #fa0065; }
       a { color: #fa0065; font-weight: 700; transition-duration: .2s; text-decoration: none; border-bottom: 2px solid transparent; }
       a:hover { color: #22272a; border-color: #22272a; }
-      p, ul, ol, pre { margin: 0 auto 1.5rem auto; }
+      p, ul, ol, pre { margin: auto; }
       p code, li code {color: #000080; font-size: .9em; }
       pre { font-size: 14px; line-height: 2; }
       pre code { overflow: scroll; padding: 1em; border-radius: 4px; background: #f9fafb; color: #475359; }
-      hr { height: 3px; background: #f0f2f3; border: none; margin: 3rem 0; border-radius: 3px; }
+      hr { height: 1px; background: #ccc; border: none; margin: 10px 0; border-radius: 3px; }
       code { font-family: 'fira mono', monospace; }
     </style>
     
     <script>
       var minX = null, minY = null;
+      var SVGcontents = '';
       
+      /*
       function getURLParameter(name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(window.location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
       }
+      */
 
       $(document).ready(function () {
         document.getElementById('fileInput').addEventListener('change', readSingleFile, false);
       });
       
       function setupSVGtable() {
-        document.getElementsByTagName('table')[0].style.margin = `${getURLParameter('offsetTop') || 0} 0 0 ${getURLParameter('offsetLeft') || 0}`;
-        var turned = getURLParameter('turn');
+        var theTable = document.getElementsByTagName('table')[0];
+        theTable.style.margin = `${(document.getElementById('oTop') + 'in') || 0} 0 0 ${(document.getElementById('oLeft') + 'in') || 0}`;
+        
+        var rowCount = parseInt(document.getElementById('mHigh').value);
+        var colCount = parseInt(document.getElementById('mWide').value);
+        
+        for (var m = 0; m < rowCount; m++) {
+          var row[m] = theTable.insertRow(m);
+          for (var n = 0; n < colCount; n++) {
+            var cell = row[m].insertCell(n);
+            cell.innerHTML = SVGcontents;
+          }
+        }
+        
+        setupSVGformatting();
+      }
+      
+      function setupSVGformatting() {
+        var turned = document.getElementById('flip').value === '0' ? false : true;
         if (turned) {
           var theSVG = document.getElementsByTagName('svg');
           for (var k = 0; k < theSVG.length; k++) {
@@ -66,18 +86,14 @@
             theSVG[k].setAttribute('width', tempDim[0]);
           }
         }
-      }
-      
-      function polyLinePaths() {
         var thePaths = document.getElementsByTagName('path');
         for (var a = 0; a < thePaths.length; a++) {
           scanMin(thePaths[a]);
         }
         for (var a = 0; a < thePaths.length; a++) {
           flatten(thePaths[a]);
-        }
-      }
-      
+        } 
+      }      
 
       function scanMin(path){
         var l = path.getTotalLength();
@@ -138,16 +154,9 @@
 
         if (f) {
           var r = new FileReader();
-          
-          //TODO: change this.
           r.onload = function(e) { 
             var contents = e.target.result;
-            alert( "Got the file.n" 
-                  +"name: " + f.name + "n"
-                  +"type: " + f.type + "n"
-                  +"size: " + f.size + " bytesn"
-                  + "starts with: " + contents.substr(1, contents.indexOf("n"))
-            );  
+            SVGcontents = contents;
           }
           r.readAsText(f);
         } else { 
@@ -180,8 +189,8 @@
         <option value="0">normal</value>
         <option value="1">flipped</value>
       <select>
-
-      <a href="#" rel="modal:close">Close</a>
+      <hr>
+      <a href="#" rel="modal:close" onclick="setupSVGtable();">Continue</a>
     </div>
 
     <!-- Link to open the modal -->
