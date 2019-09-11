@@ -43,7 +43,7 @@
         height: 1px; 
         background: #ddd; 
         border: none; 
-        margin: 10px 0; 
+        margin: 20px 0; 
         border-radius: 3px; 
       }
     </style>
@@ -190,12 +190,14 @@
       <p>Offset in inches (0.5 inch minimum):</p>
       <label for="oTop">Top</label>
       <input type="text" id="oTop" name="oTop" value="0.5" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.5) this.value='0.5';" />
+      <br>
       <label for="oLeft">Left</label>
       <input type="text" id="oLeft" name="oLeft" value="0.5" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.5) this.value='0.5';" />
       <hr>
       <p>Multiples (grid):</p>
       <label for="mWide">columns &#8596;</label>
       <input type="text" id="mWide" name="mWide" value="1" onBlur="this.value=parseInt(this.value); if (parseInt(this.value)<1) this.value='1';" />
+      <br>
       <label for="mHigh">rows &#8597;</label>
       <input type="text" id="mHigh" name="mHigh" value="1" onBlur="this.value=parseInt(this.value); if (parseInt(this.value)<1) this.value='1';" />
       <hr>
