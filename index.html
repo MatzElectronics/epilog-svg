@@ -103,15 +103,21 @@
         for (var k = 0; k < theSVG.length; k++) {
           var theViewBox = theSVG[k].getAttribute('viewBox').split(' ');
           var tempDim = [theSVG[k].getAttribute('height'), theSVG[k].getAttribute('width')];
+          var n = [parseFloat(tempDim[0]), parseFloat(tempDim[1])]
+          var lh = tempDim[0].length - n[0].toString().length;
+          var lw = tempDim[1].length - n[1].toString().length;
+          var u = [tempDim[0].slice(lh), tempDim[1].slice(lw)];
+          tempDim[0] = (n[0] * sScale) + u[0];
+          tempDim[1] = (n[1] * sScale) + u[1];
           while(theSVG[k].attributes.length > 0) {
             theSVG[k].removeAttribute(theSVG[k].attributes[0].name);
           }
           if (turned) {
-            theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + (theViewBox[3] / sScale).toFixed(4) + ' ' + (theViewBox[2] / sScale).toFixed(4));
+            theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + theViewBox[3] + ' ' + theViewBox[2]);
             theSVG[k].setAttribute('height', tempDim[1]);
             theSVG[k].setAttribute('width', tempDim[0]);
           } else {
-            theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + (theViewBox[2] / sScale).toFixed(4) + ' ' + (theViewBox[3] / sScale).toFixed(4));
+            theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + theViewBox[2] + ' ' + theViewBox[3]);
             theSVG[k].setAttribute('height', tempDim[0]);
             theSVG[k].setAttribute('width', tempDim[1]);
           }
