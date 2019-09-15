@@ -76,7 +76,8 @@
       
       function setupSVGtable() {
         var theTable = document.getElementsByTagName('table')[0];
-        theTable.style.margin = `${(((parseFloat(document.getElementById('oTop').value)-0.4) || 0)/.9).toFixed(2)}in 0 0 ${(((parseFloat(document.getElementById('oLeft').value)-0.4) || 0)/.9).toFixed(2)}in`;
+        var theScale = parseFloat(document.getElementById('sSacle').value);
+        theTable.style.margin = `${(((parseFloat(document.getElementById('oTop').value)-0.4) || 0)*theScale).toFixed(2)}in 0 0 ${(((parseFloat(document.getElementById('oLeft').value)-0.4) || 0)*theScale).toFixed(2)}in`;
         
         var rowCount = parseInt(document.getElementById('mHigh').value);
         var colCount = parseInt(document.getElementById('mWide').value);
@@ -90,22 +91,29 @@
           }
         }
         
-        setupSVGformatting();
+        setupSVGformatting(theScale);
       }
       
-      function setupSVGformatting() {
+      function setupSVGformatting(sScale) {
+        if (!sScale) {
+          sScale = 1;
+        }
         turned = document.getElementById('flip').value === '0' ? false : true;
-        if (turned) {
-          var theSVG = document.getElementsByTagName('svg');
-          for (var k = 0; k < theSVG.length; k++) {
-            var theViewBox = theSVG[k].getAttribute('viewBox').split(' ');
-            var tempDim = [theSVG[k].getAttribute('height'), theSVG[k].getAttribute('width')];
-            while(theSVG[k].attributes.length > 0) {
-              theSVG[k].removeAttribute(theSVG[k].attributes[0].name);
-            }
-            theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + theViewBox[3] + ' ' + theViewBox[2]);
+        var theSVG = document.getElementsByTagName('svg');
+        for (var k = 0; k < theSVG.length; k++) {
+          var theViewBox = theSVG[k].getAttribute('viewBox').split(' ');
+          var tempDim = [theSVG[k].getAttribute('height'), theSVG[k].getAttribute('width')];
+          while(theSVG[k].attributes.length > 0) {
+            theSVG[k].removeAttribute(theSVG[k].attributes[0].name);
+          }
+          if (turned) {
+            theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + (theViewBox[3] / sScale).toFixed(4) + ' ' + (theViewBox[2] / sScale).toFixed(4));
             theSVG[k].setAttribute('height', tempDim[1]);
             theSVG[k].setAttribute('width', tempDim[0]);
+          } else {
+            theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + (theViewBox[2] / sScale).toFixed(4) + ' ' + (theViewBox[3] / sScale).toFixed(4));
+            theSVG[k].setAttribute('height', tempDim[0]);
+            theSVG[k].setAttribute('width', tempDim[1]);
           }
         }
         var thePaths = document.getElementsByTagName('path');
@@ -207,6 +215,9 @@
       <br>
       <label for="mHigh">rows &#8597;</label>
       <input type="text" id="mHigh" name="mHigh" value="1" onBlur="this.value=parseInt(this.value); if (parseInt(this.value)<1) this.value='1';" />
+      <hr>
+      <p>Scale:</p>
+      <input type="text" id="sScale" name="sScale" value="111.11" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<1.0) this.value='1.0';" />%
       <hr>
       <p>Flip x/y axis:</p>
       <select name="flip" id="flip">
