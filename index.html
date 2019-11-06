@@ -207,12 +207,12 @@
       <p>Choose an SVG file to upload:</p>
       <input type="file" id="fileInput" name="fileInput" accept=".svg"/>
       <hr>
-      <p>Offset in inches (0.4 inch minimum):</p>
+      <p>Offset in inches (0.5 inch recommended minimum):</p>
       <label for="oTop">Top</label>
-      <input type="text" id="oTop" name="oTop" value="0.4" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.4) this.value='0.4';" />
+      <input type="text" id="oTop" name="oTop" value="0.5" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.0) this.value='0.5';" />
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <label for="oLeft">Left</label>
-      <input type="text" id="oLeft" name="oLeft" value="0.4" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.4) this.value='0.4';" />
+      <input type="text" id="oLeft" name="oLeft" value="0.5" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0.0) this.value='0.5';" />
       <hr>
       <p>Multiples (grid):</p>
       <label for="mWide">columns &#8596;</label>
@@ -223,7 +223,7 @@
       <hr>
       <p>Scale and Line Width:</p>
       <label for="sScale">Scale</label>
-      <input type="text" id="sScale" name="sScale" value="111.11" onblur="this.value=parseFloat(this.value); if (parseFloat(this.value)<1.0) this.value='1.0';">%
+      <input type="text" id="sScale" name="sScale" value="100" onblur="this.value=parseFloat(this.value); if (parseFloat(this.value)<1.0) this.value='1.0';">%
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <label for="lWidth">Line Width</label>
       <input type="text" id="lWidth" name="lWidth" value="0.00254" onblur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0) this.value='0.00254';">
