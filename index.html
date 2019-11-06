@@ -104,14 +104,13 @@
           var theViewBox = theSVG[k].getAttribute('viewBox').split(' ');
           var tempDim = [theSVG[k].getAttribute('height'), theSVG[k].getAttribute('width')];
           var n = [parseFloat(tempDim[0]), parseFloat(tempDim[1])]
-          var lh = tempDim[0].length - n[0].toString().length;
-          var lw = tempDim[1].length - n[1].toString().length;
-          var u = [tempDim[0].slice(lh), tempDim[1].slice(lw)];
+          var u = [tempDim[0].replace(/[0-9\-.]+/g,''), tempDim[1].replace(/[0-9\-.]+/g,'')];
           tempDim[0] = (n[0] * sScale) + u[0];
           tempDim[1] = (n[1] * sScale) + u[1];
           while(theSVG[k].attributes.length > 0) {
             theSVG[k].removeAttribute(theSVG[k].attributes[0].name);
           }
+          //console.log(tempDim);
           if (turned) {
             theSVG[k].setAttribute('viewBox', theViewBox[0] + ' ' + theViewBox[1] + ' ' + theViewBox[3] + ' ' + theViewBox[2]);
             theSVG[k].setAttribute('height', tempDim[1]);
@@ -172,7 +171,7 @@
 
         //console.log(d+"z");
         path.setAttribute("d",d+"z")
-        path.setAttribute("stroke-width", "0.00254");
+        path.setAttribute("stroke-width", parseFloat(document.getElementById('lWidth').value).toString());
         path.setAttribute("stroke", "rgb(255,0,0)");
         path.setAttribute("fill", "none");
       }
@@ -222,8 +221,12 @@
       <label for="mHigh">rows &#8597;</label>
       <input type="text" id="mHigh" name="mHigh" value="1" onBlur="this.value=parseInt(this.value); if (parseInt(this.value)<1) this.value='1';" />
       <hr>
-      <p>Scale:</p>
-      <input type="text" id="sScale" name="sScale" value="111.11" onBlur="this.value=parseFloat(this.value); if (parseFloat(this.value)<1.0) this.value='1.0';" />%
+      <p>Scale and Line Width:</p>
+      <label for="sScale">Scale</label>
+      <input type="text" id="sScale" name="sScale" value="111.11" onblur="this.value=parseFloat(this.value); if (parseFloat(this.value)<1.0) this.value='1.0';">%
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <label for="lWidth">Line Width</label>
+      <input type="text" id="lWidth" name="lWidth" value="0.00254" onblur="this.value=parseFloat(this.value); if (parseFloat(this.value)<0) this.value='0.00254';">
       <hr>
       <p>Flip x/y axis:</p>
       <select name="flip" id="flip">
