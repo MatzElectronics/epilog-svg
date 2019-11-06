@@ -77,7 +77,7 @@
       function setupSVGtable() {
         var theTable = document.getElementsByTagName('table')[0];
         var theScale = parseFloat(document.getElementById('sScale').value) / 100.0;
-        theTable.style.margin = `${(((parseFloat(document.getElementById('oTop').value)-0.4) || 0)*theScale).toFixed(2)}in 0 0 ${(((parseFloat(document.getElementById('oLeft').value)-0.4) || 0)*theScale).toFixed(2)}in`;
+        theTable.style.margin = `${((parseFloat(document.getElementById('oTop').value) || 0)*theScale).toFixed(2)}in 0 0 ${((parseFloat(document.getElementById('oLeft').value) || 0)*theScale).toFixed(2)}in`;
         
         var rowCount = parseInt(document.getElementById('mHigh').value);
         var colCount = parseInt(document.getElementById('mWide').value);
